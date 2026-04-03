@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoL Sade Görselli Çark</title>
+  <title>LoL Şampiyon Çarkı</title>
   <style>
     :root {
       --bg: #0b1220;
@@ -404,7 +404,12 @@
 
     const lanes = ['All', 'Top', 'Jungle', 'Mid', 'ADC', 'Support'];
     const colors = {
-      Top: '#de8a49', Jungle: '#44b774', Mid: '#7d74ff', ADC: '#e76fa3', Support: '#4eb9d8', All: '#6ea8ff'
+      Top: '#de8a49',
+      Jungle: '#44b774',
+      Mid: '#7d74ff',
+      ADC: '#e76fa3',
+      Support: '#4eb9d8',
+      All: '#6ea8ff'
     };
 
     const wheel = document.getElementById('wheel');
@@ -449,7 +454,10 @@
         const b = document.createElement('button');
         b.className = lane === selectedLane ? 'chip active' : 'chip';
         b.textContent = lane;
-        b.onclick = () => { selectedLane = lane; refresh(); };
+        b.onclick = () => {
+          selectedLane = lane;
+          refresh();
+        };
         lanesEl.appendChild(b);
       });
     }
@@ -485,6 +493,7 @@
       list.forEach((champ, i) => {
         const start = i * slice;
         const end = start + slice;
+
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, r, start, end);
@@ -519,13 +528,6 @@
       ctx.restore();
     }
 
-    function pickWinner(list) {
-      const slice = Math.PI * 2 / list.length;
-      const normalized = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      const pointerAngle = (Math.PI * 1.5 - normalized + Math.PI * 2) % (Math.PI * 2);
-      return list[Math.floor(pointerAngle / slice) % list.length];
-    }
-
     function renderResult() {
       if (!winner) {
         resultImage.style.backgroundImage = '';
@@ -536,20 +538,24 @@
         copyBtn.disabled = true;
         return;
       }
+
       resultImage.style.backgroundImage = `url('${splash(winner.key)}')`;
       resultLabel.textContent = spinning ? 'Dönüyor...' : 'Seçilen şampiyon';
       resultTitle.textContent = winner.name;
       resultMeta.innerHTML = '';
+
       const lane = document.createElement('span');
       lane.className = 'pill';
       lane.textContent = winner.lane;
       resultMeta.appendChild(lane);
+
       if (winner.isNew) {
         const n = document.createElement('span');
         n.className = 'pill';
         n.textContent = 'Yeni';
         resultMeta.appendChild(n);
       }
+
       resultDesc.textContent = `${winner.name} seçildi. İstersen tekrar çevirebilir veya sonucu kopyalayabilirsin.`;
       copyBtn.disabled = false;
     }
@@ -557,10 +563,12 @@
     function renderHistory() {
       historyEl.innerHTML = '';
       countInfo.textContent = `${filtered().length} havuzda`;
+
       if (!history.length) {
         historyEl.innerHTML = '<div class="empty">Henüz seçim yapılmadı.</div>';
         return;
       }
+
       history.forEach(item => {
         const row = document.createElement('div');
         row.className = 'history-item';
@@ -579,34 +587,50 @@
       });
     }
 
-    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeOut(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
 
     function spin() {
       const list = filtered();
       if (!list.length || spinning) return;
+
       spinning = true;
       renderResult();
+
+      const slice = Math.PI * 2 / list.length;
+      const winnerIndex = Math.floor(Math.random() * list.length);
+
+      const currentNormalized = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const desiredPointerAngle = (winnerIndex + 0.5) * slice;
+      const finalNormalized = (Math.PI * 1.5 - desiredPointerAngle + Math.PI * 2) % (Math.PI * 2);
+
+      const extraTurns = (6 + Math.random() * 2) * Math.PI * 2;
+      const deltaToTarget = (finalNormalized - currentNormalized + Math.PI * 2) % (Math.PI * 2);
+
       const start = rotation;
-      const target = start + (6 + Math.random() * 2) * Math.PI * 2 + Math.random() * Math.PI * 2;
+      const target = start + extraTurns + deltaToTarget;
       const duration = 3200;
       const startTime = performance.now();
 
       function frame(now) {
         const t = Math.min((now - startTime) / duration, 1);
         rotation = start + (target - start) * easeOut(t);
-        winner = pickWinner(list);
         draw();
-        renderResult();
+
         if (t < 1) {
           requestAnimationFrame(frame);
         } else {
+          rotation = target;
+          winner = list[winnerIndex];
           spinning = false;
-          winner = pickWinner(list);
-          history = [winner, ...history.filter(x => x.name !== winner.name)].slice(0, 6);
+          draw();
           renderResult();
+          history = [winner, ...history.filter(x => x.name !== winner.name)].slice(0, 6);
           renderHistory();
         }
       }
+
       requestAnimationFrame(frame);
     }
 
@@ -614,6 +638,7 @@
       renderLanes();
       draw();
       renderHistory();
+      renderResult();
     }
 
     searchEl.addEventListener('input', refresh);
@@ -626,6 +651,7 @@
       onlyNewEl.checked = false;
       refresh();
     });
+
     copyBtn.addEventListener('click', async () => {
       if (!winner) return;
       try {
