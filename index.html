@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoL Şampiyon Çarkı</title>
-  <meta name="description" content="League of Legends şampiyon çarkı - HTML, CSS ve JavaScript ile tek dosya." />
+  <title>LoL Görselli Şampiyon Çarkı</title>
+  <meta name="description" content="Gerçek dönen, görselli League of Legends şampiyon çarkı. Tek dosya HTML/CSS/JS." />
   <style>
     :root {
       color-scheme: dark;
-      --bg: #07111f;
-      --panel: rgba(9, 20, 37, 0.78);
-      --panel-border: rgba(146, 181, 255, 0.12);
-      --text: #edf4ff;
-      --muted: #a5b6d3;
-      --primary: #6ea8ff;
-      --primary-strong: #3a7dff;
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+      --bg-1: #06101c;
+      --bg-2: #0b1730;
+      --panel: rgba(8, 17, 31, 0.82);
+      --panel-2: rgba(13, 24, 42, 0.92);
+      --line: rgba(255,255,255,0.08);
+      --text: #eef4ff;
+      --muted: #9bb0d4;
+      --gold: #d7b56d;
+      --blue: #67a3ff;
+      --blue-2: #245dff;
+      --shadow: 0 28px 90px rgba(0,0,0,0.38);
+      --radius: 28px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -23,9 +27,11 @@
     html, body { margin: 0; min-height: 100%; }
     body {
       background:
-        radial-gradient(circle at top, rgba(64, 132, 255, 0.16), transparent 34%),
-        linear-gradient(180deg, #06101d 0%, #081528 100%);
+        radial-gradient(circle at top, rgba(68, 129, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 80% 18%, rgba(106, 58, 255, 0.14), transparent 22%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
       color: var(--text);
+      overflow-x: hidden;
     }
 
     .page {
@@ -34,136 +40,202 @@
       overflow: hidden;
     }
 
-    .bg-orb {
+    .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(90px);
       pointer-events: none;
+      opacity: 0.75;
     }
 
-    .orb-1 {
-      width: 260px;
-      height: 260px;
-      top: 40px;
-      left: -60px;
-      background: rgba(58, 125, 255, 0.22);
-    }
-
-    .orb-2 {
-      width: 320px;
-      height: 320px;
-      right: -80px;
-      top: 220px;
-      background: rgba(120, 77, 255, 0.18);
-    }
+    .orb.a { width: 320px; height: 320px; left: -90px; top: 40px; background: rgba(74, 123, 255, 0.22); }
+    .orb.b { width: 360px; height: 360px; right: -100px; top: 240px; background: rgba(132, 65, 255, 0.18); }
 
     .container {
       position: relative;
-      z-index: 1;
-      max-width: 1240px;
+      z-index: 2;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 40px 20px 64px;
+      padding: 34px 18px 60px;
     }
 
-    .hero { margin-bottom: 28px; }
-    .hero h1 {
-      margin: 0 0 12px;
-      font-size: clamp(2.6rem, 5vw, 5rem);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
+    .hero {
+      margin-bottom: 24px;
     }
 
-    .hero p {
-      margin: 0;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.75;
-    }
-
-    .hero-badges {
+    .badges {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .badge, .pill {
       display: inline-flex;
       align-items: center;
-      border-radius: 999px;
+      gap: 8px;
       padding: 9px 14px;
-      font-size: 0.92rem;
-      line-height: 1;
+      border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      font-size: 0.92rem;
+      line-height: 1;
     }
 
-    .badge.secondary { background: rgba(72, 104, 180, 0.2); }
+    .badge.alt { background: rgba(103, 163, 255, 0.16); }
     .badge.outline { background: transparent; }
 
-    .grid {
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 6vw, 5.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+    }
+
+    .hero p {
+      max-width: 860px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.8;
+    }
+
+    .layout {
       display: grid;
-      grid-template-columns: 1.35fr 0.85fr;
-      gap: 24px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      align-items: start;
     }
 
     .panel {
       background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .panel-body {
       padding: 22px;
     }
 
-    .big-panel { min-height: 620px; }
-    .side-stack { display: grid; gap: 24px; }
-
-    .panel-header {
+    .panel-title {
+      margin: 0 0 16px;
+      font-size: 1.18rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
     }
 
-    .panel-header h2, .panel-header h3 { margin: 0; }
-    .muted, .small-text, .empty-state { color: var(--muted); }
+    .muted { color: var(--muted); }
 
-    .toolbar {
+    .wheel-stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 820px;
+      padding: 20px 10px 30px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 45%),
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+
+    .pointer {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 34px solid #f4d28a;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.35));
+      z-index: 5;
+    }
+
+    .wheel-shell {
+      position: relative;
+      width: min(88vw, 760px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(215,181,109,0.45), rgba(112,145,255,0.18));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35), inset 0 0 20px rgba(255,255,255,0.05);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(0,0,0,0.18));
+    }
+
+    .wheel-center {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #1d386a, #091425 72%);
+      border: 6px solid rgba(215,181,109,0.72);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.32);
+      z-index: 4;
+    }
+
+    .wheel-center small {
+      display: block;
+      color: #cfddff;
+      font-size: 0.66rem;
+      letter-spacing: 0.22em;
+      margin-bottom: 4px;
+    }
+
+    .controls {
       display: grid;
       gap: 14px;
-      margin-bottom: 20px;
+      margin-top: 22px;
     }
 
-    input[type="text"] {
+    .search {
       width: 100%;
-      height: 52px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(4, 13, 25, 0.95);
-      color: var(--text);
+      height: 54px;
       border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(4, 12, 22, 0.96);
+      color: var(--text);
       padding: 0 16px;
       outline: none;
     }
 
-    input[type="text"]:focus {
-      border-color: rgba(110, 168, 255, 0.7);
-      box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.12);
+    .search:focus {
+      border-color: rgba(103, 163, 255, 0.78);
+      box-shadow: 0 0 0 4px rgba(103,163,255,0.12);
     }
 
-    .lane-buttons {
+    .chips {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .chip, .ghost-btn, .primary-btn, .secondary-btn {
+    button {
+      font: inherit;
       border: 0;
       cursor: pointer;
-      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+      transition: transform .18s ease, opacity .18s ease, background .18s ease;
     }
 
     .chip {
@@ -174,15 +246,16 @@
     }
 
     .chip.active {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      color: #fff;
     }
 
-    .toolbar-row {
+    .row {
       display: flex;
-      justify-content: space-between;
       gap: 12px;
+      justify-content: space-between;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .toggle {
@@ -192,234 +265,328 @@
       color: var(--muted);
     }
 
-    .ghost-btn {
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary, .secondary, .ghost {
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 18px;
+      font-weight: 800;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #78b0ff, #2961ff);
+      color: #fff;
+    }
+
+    .secondary {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ghost {
       background: transparent;
       color: var(--muted);
-      padding: 10px 0;
+      min-height: auto;
+      padding: 8px 0;
     }
 
-    .wheel-box {
-      min-height: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      border-radius: 32px;
-      border: 1px solid rgba(255,255,255,0.08);
+    .primary:hover, .secondary:hover, .ghost:hover, .chip:hover { transform: translateY(-1px); }
+    .primary:disabled, .secondary:disabled { opacity: 0.46; cursor: not-allowed; }
+
+    .side {
+      display: grid;
+      gap: 22px;
+    }
+
+    .winner-card {
+      position: relative;
+      min-height: 500px;
+      background: #091221;
+    }
+
+    .winner-art {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      filter: saturate(1.04) contrast(1.02);
+      transform: scale(1.02);
+    }
+
+    .winner-overlay {
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(circle at 20% 20%, rgba(110, 168, 255, 0.16), transparent 32%),
-        linear-gradient(145deg, rgba(5, 13, 25, 0.95), rgba(16, 30, 54, 0.88));
-      text-align: center;
-      padding: 30px 18px;
+        linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.16) 24%, rgba(7,13,25,0.92) 100%),
+        linear-gradient(120deg, rgba(18, 34, 62, 0.24), rgba(0,0,0,0));
     }
 
-    .mini-label {
-      color: #89a1c8;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      font-size: 0.76rem;
+    .winner-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 500px;
+      padding: 22px;
+    }
+
+    .winner-label {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e9f1ff;
+      font-size: 0.86rem;
     }
 
     .winner-name {
-      margin-top: 18px;
-      font-size: clamp(2.2rem, 6vw, 4.5rem);
-      font-weight: 900;
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 0.95;
       letter-spacing: -0.04em;
     }
 
-    .winner-lane {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .wheel-actions {
+    .winner-meta {
+      margin-top: 10px;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
-      justify-content: center;
-    }
-
-    .primary-btn, .secondary-btn {
-      min-height: 50px;
-      border-radius: 18px;
-      padding: 0 20px;
-      font-weight: 700;
-    }
-
-    .primary-btn {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
-      color: white;
-    }
-
-    .secondary-btn {
-      background: rgba(255,255,255,0.06);
-      color: white;
-    }
-
-    .primary-btn:disabled, .secondary-btn:disabled {
-      opacity: 0.48;
-      cursor: not-allowed;
-    }
-
-    .primary-btn:not(:disabled):hover, .secondary-btn:not(:disabled):hover, .chip:hover, .ghost-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .rolling .winner-name { animation: pulse 0.75s ease-in-out infinite; }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.05); opacity: 1; }
-    }
-
-    .badge-list {
-      display: flex;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
-    .pill { background: rgba(110, 168, 255, 0.12); }
-    .pill.subtle {
-      background: rgba(255,255,255,0.05);
-      padding: 8px 12px;
+    .winner-desc {
+      margin: 14px 0 0;
+      max-width: 90%;
+      color: #d6e2fb;
+      line-height: 1.75;
+      font-size: 0.98rem;
     }
 
-    .history-list {
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .stat strong {
+      font-size: 2rem;
+    }
+
+    .history, .new-grid {
       display: grid;
       gap: 10px;
     }
 
     .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      border-radius: 18px;
-      padding: 14px 14px;
-      background: rgba(4, 13, 25, 0.72);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .stats-panel {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      grid-template-columns: 68px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
     }
 
-    .stat-box {
-      border-radius: 22px;
-      padding: 18px;
-      background: rgba(4, 13, 25, 0.72);
+    .thumb {
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      background-color: #111a2c;
       border: 1px solid rgba(255,255,255,0.05);
     }
 
-    .stat-label {
-      display: block;
+    .history-name {
+      font-weight: 800;
+    }
+
+    .history-lane {
       color: var(--muted);
-      margin-bottom: 8px;
-      font-size: 0.92rem;
+      font-size: .92rem;
+      margin-top: 4px;
     }
 
-    .stat-box strong { font-size: 1.9rem; }
-
-    @media (max-width: 980px) {
-      .grid { grid-template-columns: 1fr; }
-      .big-panel { min-height: auto; }
+    .empty {
+      color: var(--muted);
+      padding: 12px 4px;
     }
 
-    @media (max-width: 640px) {
-      .container { padding-inline: 14px; }
-      .panel { padding: 18px; border-radius: 22px; }
-      .wheel-actions, .toolbar-row { flex-direction: column; align-items: stretch; }
-      .primary-btn, .secondary-btn { width: 100%; }
-      .stats-panel { grid-template-columns: 1fr; }
+    .new-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .new-card {
+      position: relative;
+      min-height: 180px;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: #0a1324;
+    }
+
+    .new-card .art {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.04);
+    }
+
+    .new-card .shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(7,13,25,0.94));
+    }
+
+    .new-card .info {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 2;
+    }
+
+    .new-card strong { display: block; font-size: 1.1rem; }
+    .new-card small { color: #d1dfff; }
+
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 1fr; }
+      .wheel-stage { min-height: auto; }
+    }
+
+    @media (max-width: 760px) {
+      .container { padding-inline: 12px; }
+      .panel-body { padding: 16px; }
+      .wheel-shell { width: min(96vw, 680px); }
+      .wheel-center { width: 92px; height: 92px; font-size: 0.8rem; }
+      .row, .actions { flex-direction: column; align-items: stretch; }
+      .new-grid, .stat-grid { grid-template-columns: 1fr; }
+      .history-item { grid-template-columns: 56px 1fr; }
+      .history-item .pill { justify-self: start; }
+      .thumb { width: 56px; height: 56px; }
+      .winner-content, .winner-card { min-height: 420px; }
+      .winner-desc { max-width: 100%; }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
+    <div class="orb a"></div>
+    <div class="orb b"></div>
 
     <main class="container">
       <section class="hero">
-        <div class="hero-badges">
+        <div class="badges">
           <span class="badge">League of Legends</span>
-          <span class="badge secondary">Karakter seçme.</span>
-          <span class="badge outline">By SoloKing</span>
+          <span class="badge alt">3 Nisan 2026 temalı</span>
+          <span class="badge outline">Gerçek dönen wheel</span>
         </div>
-
-        <h1>LoL Şampiyon Çarkı</h1>
+        <h1>LoL Görselli Şampiyon Çarkı</h1>
         <p>
-          Modern görünümlü, direkt GitHub'a atılabilecek tek dosya şampiyon seçici.
-          Lane filtresi, arama, yeni şampiyon modu ve seçim geçmişi içerir.
+          Bu sürüm düz seçim ekranı değil. Gerçek yuvarlak wheel var, pointer ile dönüyor, lane filtreleniyor,
+          seçilen şampiyon büyük görselli kartta gösteriliyor ve son seçimler görsel geçmiş olarak saklanıyor.
         </p>
       </section>
 
-      <section class="grid">
-        <div class="panel big-panel">
-          <div class="panel-header">
-            <h2>Şampiyon Seçici</h2>
-            <span class="muted" id="filteredCount">0 şampiyon hazır</span>
-          </div>
+      <section class="layout">
+        <section class="panel">
+          <div class="panel-body">
+            <h2 class="panel-title">
+              <span>Gerçek Çark</span>
+              <span class="muted" id="filteredCount">0 şampiyon hazır</span>
+            </h2>
 
-          <div class="toolbar">
-            <input id="searchInput" type="text" placeholder="Şampiyon ara..." />
+            <div class="wheel-stage">
+              <div class="pointer"></div>
+              <div class="wheel-shell">
+                <canvas id="wheelCanvas" width="1200" height="1200"></canvas>
+                <div class="wheel-center"><div><small>LOL</small>SPIN</div></div>
+              </div>
+            </div>
 
-            <div class="lane-buttons" id="laneButtons"></div>
+            <div class="controls">
+              <input class="search" id="searchInput" type="text" placeholder="Şampiyon ara..." />
 
-            <div class="toolbar-row">
-              <label class="toggle">
-                <input id="onlyNewToggle" type="checkbox" />
-                <span>Sadece yeni şampiyonlar</span>
-              </label>
+              <div class="chips" id="laneButtons"></div>
 
-              <button class="ghost-btn" id="resetBtn">Filtreleri sıfırla</button>
+              <div class="row">
+                <label class="toggle">
+                  <input type="checkbox" id="onlyNewToggle" />
+                  <span>Sadece yeni şampiyonlar</span>
+                </label>
+                <button class="ghost" id="resetBtn">Filtreleri sıfırla</button>
+              </div>
+
+              <div class="actions">
+                <button class="primary" id="spinBtn">Çarkı Çevir</button>
+                <button class="secondary" id="copyBtn" disabled>Sonucu Kopyala</button>
+              </div>
             </div>
           </div>
+        </section>
 
-          <div class="wheel-box" id="wheelBox">
-            <div class="mini-label" id="statusLabel">Seçilen şampiyon</div>
-            <div class="winner-name" id="winnerName">Hazır</div>
-            <div class="winner-lane" id="winnerLane">Bir filtre seç veya direkt çevir</div>
+        <aside class="side">
+          <section class="panel winner-card">
+            <div class="winner-art" id="winnerArt"></div>
+            <div class="winner-overlay"></div>
+            <div class="winner-content">
+              <span class="winner-label" id="winnerLabel">Hazır</span>
+              <h2 class="winner-name" id="winnerName">Çark seni bekliyor</h2>
+              <div class="winner-meta" id="winnerMeta"></div>
+              <p class="winner-desc" id="winnerDesc">
+                Bir lane seçebilir, arama yapabilir ya da direkt tüm şampiyon havuzuyla çarkı çevirebilirsin.
+              </p>
+            </div>
+          </section>
 
-            <div class="wheel-actions">
-              <button class="primary-btn" id="spinBtn">Çarkı Çevir</button>
-              <button class="secondary-btn" id="copyBtn" disabled>Sonucu Kopyala</button>
+          <section class="panel">
+            <div class="panel-body">
+              <h3 class="panel-title"><span>İstatistik</span></h3>
+              <div class="stat-grid">
+                <div class="stat"><span>Toplam Şampiyon</span><strong id="totalCount">0</strong></div>
+                <div class="stat"><span>Filtrelenen</span><strong id="filteredStat">0</strong></div>
+              </div>
             </div>
-          </div>
-        </div>
+          </section>
 
-        <aside class="side-stack">
-          <div class="panel">
-            <div class="panel-header">
-              <h3>Yeni Şampiyonlar</h3>
+          <section class="panel">
+            <div class="panel-body">
+              <h3 class="panel-title"><span>Yeni Şampiyonlar</span></h3>
+              <div class="new-grid" id="newChampionsGrid"></div>
             </div>
-            <div class="badge-list" id="newChampionsList"></div>
-            <p class="small-text">Bu mod, son dönem eklenen şampiyonları ayrı göstermek için hazırlandı.</p>
-          </div>
+          </section>
 
-          <div class="panel">
-            <div class="panel-header">
-              <h3>Son Seçimler</h3>
+          <section class="panel">
+            <div class="panel-body">
+              <h3 class="panel-title"><span>Son Seçimler</span></h3>
+              <div class="history" id="historyList"></div>
             </div>
-            <div class="history-list" id="historyList">
-              <div class="empty-state">Henüz seçim yapılmadı.</div>
-            </div>
-          </div>
-
-          <div class="panel stats-panel">
-            <div class="stat-box">
-              <span class="stat-label">Toplam Şampiyon</span>
-              <strong id="totalCount">0</strong>
-            </div>
-            <div class="stat-box">
-              <span class="stat-label">Filtrelenen</span>
-              <strong id="filteredStat">0</strong>
-            </div>
-          </div>
+          </section>
         </aside>
       </section>
     </main>
@@ -427,257 +594,247 @@
 
   <script>
     const champions = [
-      { name: 'Aatrox', lane: 'Top' },
-      { name: 'Ahri', lane: 'Mid' },
-      { name: 'Akali', lane: 'Mid' },
-      { name: 'Akshan', lane: 'Mid' },
-      { name: 'Alistar', lane: 'Support' },
-      { name: 'Ambessa', lane: 'Top', isNew: true },
-      { name: 'Amumu', lane: 'Jungle' },
-      { name: 'Anivia', lane: 'Mid' },
-      { name: 'Annie', lane: 'Mid' },
-      { name: 'Aphelios', lane: 'ADC' },
-      { name: 'Ashe', lane: 'ADC' },
-      { name: 'Aurelion Sol', lane: 'Mid' },
-      { name: 'Aurora', lane: 'Mid' },
-      { name: 'Azir', lane: 'Mid' },
-      { name: 'Bard', lane: 'Support' },
-      { name: "Bel'Veth", lane: 'Jungle' },
-      { name: 'Blitzcrank', lane: 'Support' },
-      { name: 'Brand', lane: 'Support' },
-      { name: 'Braum', lane: 'Support' },
-      { name: 'Briar', lane: 'Jungle' },
-      { name: 'Caitlyn', lane: 'ADC' },
-      { name: 'Camille', lane: 'Top' },
-      { name: 'Cassiopeia', lane: 'Mid' },
-      { name: "Cho'Gath", lane: 'Top' },
-      { name: 'Corki', lane: 'Mid' },
-      { name: 'Darius', lane: 'Top' },
-      { name: 'Diana', lane: 'Jungle' },
-      { name: 'Dr. Mundo', lane: 'Top' },
-      { name: 'Draven', lane: 'ADC' },
-      { name: 'Ekko', lane: 'Jungle' },
-      { name: 'Elise', lane: 'Jungle' },
-      { name: 'Evelynn', lane: 'Jungle' },
-      { name: 'Ezreal', lane: 'ADC' },
-      { name: 'Fiddlesticks', lane: 'Jungle' },
-      { name: 'Fiora', lane: 'Top' },
-      { name: 'Fizz', lane: 'Mid' },
-      { name: 'Galio', lane: 'Mid' },
-      { name: 'Gangplank', lane: 'Top' },
-      { name: 'Garen', lane: 'Top' },
-      { name: 'Gnar', lane: 'Top' },
-      { name: 'Gragas', lane: 'Top' },
-      { name: 'Graves', lane: 'Jungle' },
-      { name: 'Gwen', lane: 'Top' },
-      { name: 'Hecarim', lane: 'Jungle' },
-      { name: 'Heimerdinger', lane: 'Mid' },
-      { name: 'Hwei', lane: 'Mid' },
-      { name: 'Illaoi', lane: 'Top' },
-      { name: 'Irelia', lane: 'Top' },
-      { name: 'Ivern', lane: 'Jungle' },
-      { name: 'Janna', lane: 'Support' },
-      { name: 'Jarvan IV', lane: 'Jungle' },
-      { name: 'Jax', lane: 'Top' },
-      { name: 'Jayce', lane: 'Top' },
-      { name: 'Jhin', lane: 'ADC' },
-      { name: 'Jinx', lane: 'ADC' },
-      { name: "Kai'Sa", lane: 'ADC' },
-      { name: 'Kalista', lane: 'ADC' },
-      { name: 'Karma', lane: 'Support' },
-      { name: 'Karthus', lane: 'Jungle' },
-      { name: 'Kassadin', lane: 'Mid' },
-      { name: 'Katarina', lane: 'Mid' },
-      { name: 'Kayle', lane: 'Top' },
-      { name: 'Kayn', lane: 'Jungle' },
-      { name: 'Kennen', lane: 'Top' },
-      { name: "Kha'Zix", lane: 'Jungle' },
-      { name: 'Kindred', lane: 'Jungle' },
-      { name: 'Kled', lane: 'Top' },
-      { name: "Kog'Maw", lane: 'ADC' },
-      { name: 'LeBlanc', lane: 'Mid' },
-      { name: 'Lee Sin', lane: 'Jungle' },
-      { name: 'Leona', lane: 'Support' },
-      { name: 'Lillia', lane: 'Jungle' },
-      { name: 'Lissandra', lane: 'Mid' },
-      { name: 'Lucian', lane: 'ADC' },
-      { name: 'Lulu', lane: 'Support' },
-      { name: 'Lux', lane: 'Mid' },
-      { name: 'Malphite', lane: 'Top' },
-      { name: 'Malzahar', lane: 'Mid' },
-      { name: 'Maokai', lane: 'Support' },
-      { name: 'Master Yi', lane: 'Jungle' },
-      { name: 'Mel', lane: 'Mid', isNew: true },
-      { name: 'Milio', lane: 'Support' },
-      { name: 'Miss Fortune', lane: 'ADC' },
-      { name: 'Mordekaiser', lane: 'Top' },
-      { name: 'Morgana', lane: 'Support' },
-      { name: 'Naafiri', lane: 'Mid' },
-      { name: 'Nami', lane: 'Support' },
-      { name: 'Nasus', lane: 'Top' },
-      { name: 'Nautilus', lane: 'Support' },
-      { name: 'Neeko', lane: 'Mid' },
-      { name: 'Nidalee', lane: 'Jungle' },
-      { name: 'Nilah', lane: 'ADC' },
-      { name: 'Nocturne', lane: 'Jungle' },
-      { name: 'Nunu & Willump', lane: 'Jungle' },
-      { name: 'Olaf', lane: 'Top' },
-      { name: 'Orianna', lane: 'Mid' },
-      { name: 'Ornn', lane: 'Top' },
-      { name: 'Pantheon', lane: 'Top' },
-      { name: 'Poppy', lane: 'Top' },
-      { name: 'Pyke', lane: 'Support' },
-      { name: 'Qiyana', lane: 'Mid' },
-      { name: 'Quinn', lane: 'Top' },
-      { name: 'Rakan', lane: 'Support' },
-      { name: 'Rammus', lane: 'Jungle' },
-      { name: "Rek'Sai", lane: 'Jungle' },
-      { name: 'Rell', lane: 'Support' },
-      { name: 'Renata Glasc', lane: 'Support' },
-      { name: 'Renekton', lane: 'Top' },
-      { name: 'Rengar', lane: 'Jungle' },
-      { name: 'Riven', lane: 'Top' },
-      { name: 'Rumble', lane: 'Top' },
-      { name: 'Ryze', lane: 'Mid' },
-      { name: 'Samira', lane: 'ADC' },
-      { name: 'Sejuani', lane: 'Jungle' },
-      { name: 'Senna', lane: 'Support' },
-      { name: 'Seraphine', lane: 'Support' },
-      { name: 'Sett', lane: 'Top' },
-      { name: 'Shaco', lane: 'Jungle' },
-      { name: 'Shen', lane: 'Top' },
-      { name: 'Shyvana', lane: 'Jungle' },
-      { name: 'Singed', lane: 'Top' },
-      { name: 'Sion', lane: 'Top' },
-      { name: 'Sivir', lane: 'ADC' },
-      { name: 'Skarner', lane: 'Jungle' },
-      { name: 'Smolder', lane: 'ADC' },
-      { name: 'Sona', lane: 'Support' },
-      { name: 'Soraka', lane: 'Support' },
-      { name: 'Swain', lane: 'Mid' },
-      { name: 'Sylas', lane: 'Mid' },
-      { name: 'Syndra', lane: 'Mid' },
-      { name: 'Tahm Kench', lane: 'Support' },
-      { name: 'Taliyah', lane: 'Mid' },
-      { name: 'Talon', lane: 'Mid' },
-      { name: 'Taric', lane: 'Support' },
-      { name: 'Teemo', lane: 'Top' },
-      { name: 'Thresh', lane: 'Support' },
-      { name: 'Tristana', lane: 'ADC' },
-      { name: 'Trundle', lane: 'Top' },
-      { name: 'Tryndamere', lane: 'Top' },
-      { name: 'Twisted Fate', lane: 'Mid' },
-      { name: 'Twitch', lane: 'ADC' },
-      { name: 'Udyr', lane: 'Jungle' },
-      { name: 'Urgot', lane: 'Top' },
-      { name: 'Varus', lane: 'ADC' },
-      { name: 'Vayne', lane: 'ADC' },
-      { name: 'Veigar', lane: 'Mid' },
-      { name: "Vel'Koz", lane: 'Support' },
-      { name: 'Vex', lane: 'Mid' },
-      { name: 'Vi', lane: 'Jungle' },
-      { name: 'Viego', lane: 'Jungle' },
-      { name: 'Viktor', lane: 'Mid' },
-      { name: 'Vladimir', lane: 'Mid' },
-      { name: 'Volibear', lane: 'Top' },
-      { name: 'Warwick', lane: 'Jungle' },
-      { name: 'Wukong', lane: 'Top' },
-      { name: 'Xayah', lane: 'ADC' },
-      { name: 'Xerath', lane: 'Mid' },
-      { name: 'Xin Zhao', lane: 'Jungle' },
-      { name: 'Yasuo', lane: 'Mid' },
-      { name: 'Yone', lane: 'Mid' },
-      { name: 'Yorick', lane: 'Top' },
-      { name: 'Yuumi', lane: 'Support' },
-      { name: 'Zac', lane: 'Jungle' },
-      { name: 'Zed', lane: 'Mid' },
-      { name: 'Zeri', lane: 'ADC' },
-      { name: 'Ziggs', lane: 'ADC' },
-      { name: 'Zilean', lane: 'Support' },
-      { name: 'Zoe', lane: 'Mid' },
-      { name: 'Zyra', lane: 'Support' }
+      { name: 'Aatrox', lane: 'Top', key: 'Aatrox' },
+      { name: 'Ahri', lane: 'Mid', key: 'Ahri' },
+      { name: 'Akali', lane: 'Mid', key: 'Akali' },
+      { name: 'Akshan', lane: 'Mid', key: 'Akshan' },
+      { name: 'Alistar', lane: 'Support', key: 'Alistar' },
+      { name: 'Ambessa', lane: 'Top', key: 'Ambessa', isNew: true },
+      { name: 'Amumu', lane: 'Jungle', key: 'Amumu' },
+      { name: 'Anivia', lane: 'Mid', key: 'Anivia' },
+      { name: 'Annie', lane: 'Mid', key: 'Annie' },
+      { name: 'Aphelios', lane: 'ADC', key: 'Aphelios' },
+      { name: 'Ashe', lane: 'ADC', key: 'Ashe' },
+      { name: 'Aurelion Sol', lane: 'Mid', key: 'AurelionSol' },
+      { name: 'Aurora', lane: 'Mid', key: 'Aurora' },
+      { name: 'Azir', lane: 'Mid', key: 'Azir' },
+      { name: 'Bard', lane: 'Support', key: 'Bard' },
+      { name: "Bel'Veth", lane: 'Jungle', key: 'Belveth' },
+      { name: 'Blitzcrank', lane: 'Support', key: 'Blitzcrank' },
+      { name: 'Brand', lane: 'Support', key: 'Brand' },
+      { name: 'Braum', lane: 'Support', key: 'Braum' },
+      { name: 'Briar', lane: 'Jungle', key: 'Briar' },
+      { name: 'Caitlyn', lane: 'ADC', key: 'Caitlyn' },
+      { name: 'Camille', lane: 'Top', key: 'Camille' },
+      { name: 'Cassiopeia', lane: 'Mid', key: 'Cassiopeia' },
+      { name: "Cho'Gath", lane: 'Top', key: 'Chogath' },
+      { name: 'Corki', lane: 'Mid', key: 'Corki' },
+      { name: 'Darius', lane: 'Top', key: 'Darius' },
+      { name: 'Diana', lane: 'Jungle', key: 'Diana' },
+      { name: 'Dr. Mundo', lane: 'Top', key: 'DrMundo' },
+      { name: 'Draven', lane: 'ADC', key: 'Draven' },
+      { name: 'Ekko', lane: 'Jungle', key: 'Ekko' },
+      { name: 'Elise', lane: 'Jungle', key: 'Elise' },
+      { name: 'Evelynn', lane: 'Jungle', key: 'Evelynn' },
+      { name: 'Ezreal', lane: 'ADC', key: 'Ezreal' },
+      { name: 'Fiddlesticks', lane: 'Jungle', key: 'Fiddlesticks' },
+      { name: 'Fiora', lane: 'Top', key: 'Fiora' },
+      { name: 'Fizz', lane: 'Mid', key: 'Fizz' },
+      { name: 'Galio', lane: 'Mid', key: 'Galio' },
+      { name: 'Gangplank', lane: 'Top', key: 'Gangplank' },
+      { name: 'Garen', lane: 'Top', key: 'Garen' },
+      { name: 'Gnar', lane: 'Top', key: 'Gnar' },
+      { name: 'Gragas', lane: 'Top', key: 'Gragas' },
+      { name: 'Graves', lane: 'Jungle', key: 'Graves' },
+      { name: 'Gwen', lane: 'Top', key: 'Gwen' },
+      { name: 'Hecarim', lane: 'Jungle', key: 'Hecarim' },
+      { name: 'Heimerdinger', lane: 'Mid', key: 'Heimerdinger' },
+      { name: 'Hwei', lane: 'Mid', key: 'Hwei' },
+      { name: 'Illaoi', lane: 'Top', key: 'Illaoi' },
+      { name: 'Irelia', lane: 'Top', key: 'Irelia' },
+      { name: 'Ivern', lane: 'Jungle', key: 'Ivern' },
+      { name: 'Janna', lane: 'Support', key: 'Janna' },
+      { name: 'Jarvan IV', lane: 'Jungle', key: 'JarvanIV' },
+      { name: 'Jax', lane: 'Top', key: 'Jax' },
+      { name: 'Jayce', lane: 'Top', key: 'Jayce' },
+      { name: 'Jhin', lane: 'ADC', key: 'Jhin' },
+      { name: 'Jinx', lane: 'ADC', key: 'Jinx' },
+      { name: "Kai'Sa", lane: 'ADC', key: 'Kaisa' },
+      { name: 'Kalista', lane: 'ADC', key: 'Kalista' },
+      { name: 'Karma', lane: 'Support', key: 'Karma' },
+      { name: 'Karthus', lane: 'Jungle', key: 'Karthus' },
+      { name: 'Kassadin', lane: 'Mid', key: 'Kassadin' },
+      { name: 'Katarina', lane: 'Mid', key: 'Katarina' },
+      { name: 'Kayle', lane: 'Top', key: 'Kayle' },
+      { name: 'Kayn', lane: 'Jungle', key: 'Kayn' },
+      { name: 'Kennen', lane: 'Top', key: 'Kennen' },
+      { name: "Kha'Zix", lane: 'Jungle', key: 'Khazix' },
+      { name: 'Kindred', lane: 'Jungle', key: 'Kindred' },
+      { name: 'Kled', lane: 'Top', key: 'Kled' },
+      { name: "Kog'Maw", lane: 'ADC', key: 'KogMaw' },
+      { name: 'LeBlanc', lane: 'Mid', key: 'Leblanc' },
+      { name: 'Lee Sin', lane: 'Jungle', key: 'LeeSin' },
+      { name: 'Leona', lane: 'Support', key: 'Leona' },
+      { name: 'Lillia', lane: 'Jungle', key: 'Lillia' },
+      { name: 'Lissandra', lane: 'Mid', key: 'Lissandra' },
+      { name: 'Lucian', lane: 'ADC', key: 'Lucian' },
+      { name: 'Lulu', lane: 'Support', key: 'Lulu' },
+      { name: 'Lux', lane: 'Mid', key: 'Lux' },
+      { name: 'Malphite', lane: 'Top', key: 'Malphite' },
+      { name: 'Malzahar', lane: 'Mid', key: 'Malzahar' },
+      { name: 'Maokai', lane: 'Support', key: 'Maokai' },
+      { name: 'Master Yi', lane: 'Jungle', key: 'MasterYi' },
+      { name: 'Mel', lane: 'Mid', key: 'Mel', isNew: true },
+      { name: 'Milio', lane: 'Support', key: 'Milio' },
+      { name: 'Miss Fortune', lane: 'ADC', key: 'MissFortune' },
+      { name: 'Mordekaiser', lane: 'Top', key: 'Mordekaiser' },
+      { name: 'Morgana', lane: 'Support', key: 'Morgana' },
+      { name: 'Naafiri', lane: 'Mid', key: 'Naafiri' },
+      { name: 'Nami', lane: 'Support', key: 'Nami' },
+      { name: 'Nasus', lane: 'Top', key: 'Nasus' },
+      { name: 'Nautilus', lane: 'Support', key: 'Nautilus' },
+      { name: 'Neeko', lane: 'Mid', key: 'Neeko' },
+      { name: 'Nidalee', lane: 'Jungle', key: 'Nidalee' },
+      { name: 'Nilah', lane: 'ADC', key: 'Nilah' },
+      { name: 'Nocturne', lane: 'Jungle', key: 'Nocturne' },
+      { name: 'Nunu & Willump', lane: 'Jungle', key: 'Nunu' },
+      { name: 'Olaf', lane: 'Top', key: 'Olaf' },
+      { name: 'Orianna', lane: 'Mid', key: 'Orianna' },
+      { name: 'Ornn', lane: 'Top', key: 'Ornn' },
+      { name: 'Pantheon', lane: 'Top', key: 'Pantheon' },
+      { name: 'Poppy', lane: 'Top', key: 'Poppy' },
+      { name: 'Pyke', lane: 'Support', key: 'Pyke' },
+      { name: 'Qiyana', lane: 'Mid', key: 'Qiyana' },
+      { name: 'Quinn', lane: 'Top', key: 'Quinn' },
+      { name: 'Rakan', lane: 'Support', key: 'Rakan' },
+      { name: 'Rammus', lane: 'Jungle', key: 'Rammus' },
+      { name: "Rek'Sai", lane: 'Jungle', key: 'RekSai' },
+      { name: 'Rell', lane: 'Support', key: 'Rell' },
+      { name: 'Renata Glasc', lane: 'Support', key: 'Renata' },
+      { name: 'Renekton', lane: 'Top', key: 'Renekton' },
+      { name: 'Rengar', lane: 'Jungle', key: 'Rengar' },
+      { name: 'Riven', lane: 'Top', key: 'Riven' },
+      { name: 'Rumble', lane: 'Top', key: 'Rumble' },
+      { name: 'Ryze', lane: 'Mid', key: 'Ryze' },
+      { name: 'Samira', lane: 'ADC', key: 'Samira' },
+      { name: 'Sejuani', lane: 'Jungle', key: 'Sejuani' },
+      { name: 'Senna', lane: 'Support', key: 'Senna' },
+      { name: 'Seraphine', lane: 'Support', key: 'Seraphine' },
+      { name: 'Sett', lane: 'Top', key: 'Sett' },
+      { name: 'Shaco', lane: 'Jungle', key: 'Shaco' },
+      { name: 'Shen', lane: 'Top', key: 'Shen' },
+      { name: 'Shyvana', lane: 'Jungle', key: 'Shyvana' },
+      { name: 'Singed', lane: 'Top', key: 'Singed' },
+      { name: 'Sion', lane: 'Top', key: 'Sion' },
+      { name: 'Sivir', lane: 'ADC', key: 'Sivir' },
+      { name: 'Skarner', lane: 'Jungle', key: 'Skarner' },
+      { name: 'Smolder', lane: 'ADC', key: 'Smolder' },
+      { name: 'Sona', lane: 'Support', key: 'Sona' },
+      { name: 'Soraka', lane: 'Support', key: 'Soraka' },
+      { name: 'Swain', lane: 'Mid', key: 'Swain' },
+      { name: 'Sylas', lane: 'Mid', key: 'Sylas' },
+      { name: 'Syndra', lane: 'Mid', key: 'Syndra' },
+      { name: 'Tahm Kench', lane: 'Support', key: 'TahmKench' },
+      { name: 'Taliyah', lane: 'Mid', key: 'Taliyah' },
+      { name: 'Talon', lane: 'Mid', key: 'Talon' },
+      { name: 'Taric', lane: 'Support', key: 'Taric' },
+      { name: 'Teemo', lane: 'Top', key: 'Teemo' },
+      { name: 'Thresh', lane: 'Support', key: 'Thresh' },
+      { name: 'Tristana', lane: 'ADC', key: 'Tristana' },
+      { name: 'Trundle', lane: 'Top', key: 'Trundle' },
+      { name: 'Tryndamere', lane: 'Top', key: 'Tryndamere' },
+      { name: 'Twisted Fate', lane: 'Mid', key: 'TwistedFate' },
+      { name: 'Twitch', lane: 'ADC', key: 'Twitch' },
+      { name: 'Udyr', lane: 'Jungle', key: 'Udyr' },
+      { name: 'Urgot', lane: 'Top', key: 'Urgot' },
+      { name: 'Varus', lane: 'ADC', key: 'Varus' },
+      { name: 'Vayne', lane: 'ADC', key: 'Vayne' },
+      { name: 'Veigar', lane: 'Mid', key: 'Veigar' },
+      { name: "Vel'Koz", lane: 'Support', key: 'Velkoz' },
+      { name: 'Vex', lane: 'Mid', key: 'Vex' },
+      { name: 'Vi', lane: 'Jungle', key: 'Vi' },
+      { name: 'Viego', lane: 'Jungle', key: 'Viego' },
+      { name: 'Viktor', lane: 'Mid', key: 'Viktor' },
+      { name: 'Vladimir', lane: 'Mid', key: 'Vladimir' },
+      { name: 'Volibear', lane: 'Top', key: 'Volibear' },
+      { name: 'Warwick', lane: 'Jungle', key: 'Warwick' },
+      { name: 'Wukong', lane: 'Top', key: 'MonkeyKing' },
+      { name: 'Xayah', lane: 'ADC', key: 'Xayah' },
+      { name: 'Xerath', lane: 'Mid', key: 'Xerath' },
+      { name: 'Xin Zhao', lane: 'Jungle', key: 'XinZhao' },
+      { name: 'Yasuo', lane: 'Mid', key: 'Yasuo' },
+      { name: 'Yone', lane: 'Mid', key: 'Yone' },
+      { name: 'Yorick', lane: 'Top', key: 'Yorick' },
+      { name: 'Yuumi', lane: 'Support', key: 'Yuumi' },
+      { name: 'Zac', lane: 'Jungle', key: 'Zac' },
+      { name: 'Zed', lane: 'Mid', key: 'Zed' },
+      { name: 'Zeri', lane: 'ADC', key: 'Zeri' },
+      { name: 'Ziggs', lane: 'ADC', key: 'Ziggs' },
+      { name: 'Zilean', lane: 'Support', key: 'Zilean' },
+      { name: 'Zoe', lane: 'Mid', key: 'Zoe' },
+      { name: 'Zyra', lane: 'Support', key: 'Zyra' }
     ];
 
     const lanes = ['All', 'Top', 'Jungle', 'Mid', 'ADC', 'Support'];
-    let selectedLane = 'All';
-    let search = '';
-    let showOnlyNew = false;
-    let winner = null;
-    let isRolling = false;
-    let history = [];
+    const laneColors = {
+      All: ['#66b1ff', '#275bff'],
+      Top: ['#ffb76a', '#e26927'],
+      Jungle: ['#61d989', '#1ea85f'],
+      Mid: ['#8f84ff', '#5744d8'],
+      ADC: ['#ff8ab3', '#d84f84'],
+      Support: ['#70d8ff', '#2f97cc']
+    };
 
-    const searchInput = document.getElementById('searchInput');
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
     const laneButtons = document.getElementById('laneButtons');
+    const searchInput = document.getElementById('searchInput');
     const onlyNewToggle = document.getElementById('onlyNewToggle');
-    const resetBtn = document.getElementById('resetBtn');
     const spinBtn = document.getElementById('spinBtn');
     const copyBtn = document.getElementById('copyBtn');
-    const winnerName = document.getElementById('winnerName');
-    const winnerLane = document.getElementById('winnerLane');
-    const statusLabel = document.getElementById('statusLabel');
-    const wheelBox = document.getElementById('wheelBox');
-    const historyList = document.getElementById('historyList');
-    const newChampionsList = document.getElementById('newChampionsList');
-    const totalCount = document.getElementById('totalCount');
+    const resetBtn = document.getElementById('resetBtn');
     const filteredCount = document.getElementById('filteredCount');
+    const totalCount = document.getElementById('totalCount');
     const filteredStat = document.getElementById('filteredStat');
+    const winnerArt = document.getElementById('winnerArt');
+    const winnerLabel = document.getElementById('winnerLabel');
+    const winnerName = document.getElementById('winnerName');
+    const winnerMeta = document.getElementById('winnerMeta');
+    const winnerDesc = document.getElementById('winnerDesc');
+    const historyList = document.getElementById('historyList');
+    const newChampionsGrid = document.getElementById('newChampionsGrid');
+
+    let selectedLane = 'All';
+    let winner = null;
+    let history = [];
+    let rotation = 0;
+    let isSpinning = false;
 
     function getFilteredChampions() {
-      return champions.filter((champion) => {
-        const laneMatch = selectedLane === 'All' || champion.lane === selectedLane;
-        const searchMatch = champion.name.toLowerCase().includes(search.toLowerCase());
-        const newMatch = !showOnlyNew || champion.isNew;
-        return laneMatch && searchMatch && newMatch;
+      const search = searchInput.value.trim().toLowerCase();
+      const onlyNew = onlyNewToggle.checked;
+      return champions.filter((champ) => {
+        const laneOk = selectedLane === 'All' || champ.lane === selectedLane;
+        const searchOk = champ.name.toLowerCase().includes(search);
+        const newOk = !onlyNew || champ.isNew;
+        return laneOk && searchOk && newOk;
       });
     }
 
-    function pickRandom(pool) {
-      return pool[Math.floor(Math.random() * pool.length)];
+    function getImageUrl(key) {
+      return `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${key}_0.jpg`;
+    }
+
+    function createPill(text) {
+      const span = document.createElement('span');
+      span.className = 'pill';
+      span.textContent = text;
+      return span;
     }
 
     function renderLaneButtons() {
       laneButtons.innerHTML = '';
       lanes.forEach((lane) => {
-        const button = document.createElement('button');
-        button.className = selectedLane === lane ? 'chip active' : 'chip';
-        button.textContent = lane;
-        button.addEventListener('click', () => {
+        const btn = document.createElement('button');
+        btn.className = lane === selectedLane ? 'chip active' : 'chip';
+        btn.textContent = lane;
+        btn.addEventListener('click', () => {
           selectedLane = lane;
-          render();
+          drawWheel();
+          renderStats();
         });
-        laneButtons.appendChild(button);
+        laneButtons.appendChild(btn);
       });
-    }
-
-    function renderNewChampions() {
-      newChampionsList.innerHTML = '';
-      champions.filter((c) => c.isNew).forEach((champion) => {
-        const item = document.createElement('span');
-        item.className = 'pill';
-        item.textContent = champion.name;
-        newChampionsList.appendChild(item);
-      });
-    }
-
-    function renderHistory() {
-      historyList.innerHTML = '';
-      if (!history.length) {
-        historyList.innerHTML = '<div class="empty-state">Henüz seçim yapılmadı.</div>';
-        return;
-      }
-
-      history.forEach((item) => {
-        const row = document.createElement('div');
-        row.className = 'history-item';
-        row.innerHTML = `<span>${item.name}</span><span class="pill subtle">${item.lane}</span>`;
-        historyList.appendChild(row);
-      });
-    }
-
-    function renderWinner() {
-      winnerName.textContent = winner ? winner.name : 'Hazır';
-      winnerLane.textContent = winner ? `Rol: ${winner.lane}` : 'Bir filtre seç veya direkt çevir';
-      copyBtn.disabled = !winner;
     }
 
     function renderStats() {
@@ -685,67 +842,238 @@
       totalCount.textContent = champions.length;
       filteredCount.textContent = `${filtered.length} şampiyon hazır`;
       filteredStat.textContent = filtered.length;
-      spinBtn.disabled = isRolling || !filtered.length;
-      statusLabel.textContent = isRolling ? 'Çark dönüyor...' : 'Seçilen şampiyon';
-      wheelBox.classList.toggle('rolling', isRolling);
+      spinBtn.disabled = isSpinning || filtered.length === 0;
     }
 
-    function render() {
-      search = searchInput.value;
-      showOnlyNew = onlyNewToggle.checked;
-      renderLaneButtons();
-      renderNewChampions();
-      renderHistory();
-      renderWinner();
-      renderStats();
+    function renderWinnerCard() {
+      if (!winner) {
+        winnerArt.style.backgroundImage = '';
+        winnerLabel.textContent = 'Hazır';
+        winnerName.textContent = 'Çark seni bekliyor';
+        winnerMeta.innerHTML = '';
+        winnerDesc.textContent = 'Bir lane seçebilir, arama yapabilir ya da direkt tüm şampiyon havuzuyla çarkı çevirebilirsin.';
+        copyBtn.disabled = true;
+        return;
+      }
+
+      winnerArt.style.backgroundImage = `url('${getImageUrl(winner.key)}')`;
+      winnerLabel.textContent = isSpinning ? 'Çark dönüyor...' : 'Seçilen şampiyon';
+      winnerName.textContent = winner.name;
+      winnerMeta.innerHTML = '';
+      winnerMeta.appendChild(createPill(winner.lane));
+      if (winner.isNew) winnerMeta.appendChild(createPill('Yeni'));
+      winnerDesc.textContent = `${winner.name}, ${winner.lane} havuzundan seçildi. İstersen sonucu kopyalayabilir veya aynı filtreyle tekrar çevirebilirsin.`;
+      copyBtn.disabled = false;
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = '';
+      if (!history.length) {
+        const div = document.createElement('div');
+        div.className = 'empty';
+        div.textContent = 'Henüz seçim yapılmadı.';
+        historyList.appendChild(div);
+        return;
+      }
+
+      history.forEach((champ) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `
+          <div class="thumb" style="background-image:url('${getImageUrl(champ.key)}')"></div>
+          <div>
+            <div class="history-name">${champ.name}</div>
+            <div class="history-lane">${champ.lane}</div>
+          </div>
+        `;
+        const pill = document.createElement('span');
+        pill.className = 'pill';
+        pill.textContent = champ.isNew ? 'Yeni' : 'Seçildi';
+        item.appendChild(pill);
+        historyList.appendChild(item);
+      });
+    }
+
+    function renderNewChampions() {
+      newChampionsGrid.innerHTML = '';
+      champions.filter(c => c.isNew).forEach((champ) => {
+        const card = document.createElement('div');
+        card.className = 'new-card';
+        card.innerHTML = `
+          <div class="art" style="background-image:url('${getImageUrl(champ.key)}')"></div>
+          <div class="shade"></div>
+          <div class="info">
+            <strong>${champ.name}</strong>
+            <small>${champ.lane}</small>
+          </div>
+        `;
+        newChampionsGrid.appendChild(card);
+      });
+    }
+
+    function drawWheel() {
+      const champs = getFilteredChampions();
+      const size = canvas.width;
+      const center = size / 2;
+      const radius = center - 24;
+      ctx.clearRect(0, 0, size, size);
+
+      ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(rotation - Math.PI / 2);
+
+      if (!champs.length) {
+        ctx.beginPath();
+        ctx.fillStyle = '#0e1829';
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#dce8ff';
+        ctx.font = '700 42px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Sonuç yok', 0, -8);
+        ctx.fillStyle = '#97a9c8';
+        ctx.font = '400 24px Inter, sans-serif';
+        ctx.fillText('Filtreleri değiştir', 0, 32);
+        ctx.restore();
+        return;
+      }
+
+      const anglePer = (Math.PI * 2) / champs.length;
+
+      champs.forEach((champ, index) => {
+        const start = index * anglePer;
+        const end = start + anglePer;
+        const [c1, c2] = laneColors[champ.lane] || laneColors.All;
+        const grad = ctx.createLinearGradient(Math.cos(start) * radius, Math.sin(start) * radius, Math.cos(end) * radius, Math.sin(end) * radius);
+        grad.addColorStop(0, c1);
+        grad.addColorStop(1, c2);
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(6, 13, 25, 0.38)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        const mid = start + anglePer / 2;
+        ctx.save();
+        ctx.rotate(mid);
+        ctx.translate(radius * 0.7, 0);
+        ctx.rotate(Math.PI / 2);
+
+        let fontSize = 24;
+        if (champs.length > 28) fontSize = 18;
+        if (champs.length > 50) fontSize = 14;
+        if (champs.length > 90) fontSize = 11;
+        ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        ctx.font = `800 ${fontSize}px Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'rgba(0,0,0,0.26)';
+        ctx.shadowBlur = 8;
+
+        const label = champs.length > 70 ? champ.name.slice(0, 8) : champs.length > 36 ? champ.name.slice(0, 10) : champ.name;
+        ctx.fillText(label, 0, 0);
+        ctx.restore();
+      });
+
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 6, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function pickWinnerByRotation(champs) {
+      const anglePer = (Math.PI * 2) / champs.length;
+      const normalized = ((rotation % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+      const pointerAngle = (Math.PI * 1.5 - normalized + Math.PI * 2) % (Math.PI * 2);
+      const index = Math.floor(pointerAngle / anglePer) % champs.length;
+      return champs[index];
+    }
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
     }
 
     function spinWheel() {
-      const filtered = getFilteredChampions();
-      if (!filtered.length || isRolling) return;
+      const champs = getFilteredChampions();
+      if (!champs.length || isSpinning) return;
 
-      isRolling = true;
-      render();
+      isSpinning = true;
+      spinBtn.disabled = true;
+      renderWinnerCard();
 
-      let ticks = 0;
-      const totalTicks = 22;
+      const start = rotation;
+      const extraTurns = 8 + Math.random() * 3;
+      const target = start + extraTurns * Math.PI * 2 + Math.random() * Math.PI * 2;
+      const duration = 5600;
+      const startTime = performance.now();
 
-      const interval = setInterval(() => {
-        winner = pickRandom(filtered);
-        renderWinner();
-        ticks += 1;
+      function animate(now) {
+        const t = Math.min((now - startTime) / duration, 1);
+        rotation = start + (target - start) * easeOutCubic(t);
+        winner = pickWinnerByRotation(champs);
+        drawWheel();
+        renderWinnerCard();
 
-        if (ticks >= totalTicks) {
-          clearInterval(interval);
-          winner = pickRandom(filtered);
-          history = [winner, ...history].slice(0, 10);
-          isRolling = false;
-          render();
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          isSpinning = false;
+          winner = pickWinnerByRotation(champs);
+          history = [winner, ...history.filter(item => item.name !== winner.name)].slice(0, 8);
+          renderWinnerCard();
+          renderHistory();
+          renderStats();
         }
-      }, 85);
+      }
+
+      requestAnimationFrame(animate);
     }
 
-    searchInput.addEventListener('input', render);
-    onlyNewToggle.addEventListener('change', render);
+    searchInput.addEventListener('input', () => {
+      drawWheel();
+      renderStats();
+    });
+
+    onlyNewToggle.addEventListener('change', () => {
+      drawWheel();
+      renderStats();
+    });
+
     resetBtn.addEventListener('click', () => {
       selectedLane = 'All';
       searchInput.value = '';
       onlyNewToggle.checked = false;
-      render();
+      renderLaneButtons();
+      drawWheel();
+      renderStats();
     });
 
     spinBtn.addEventListener('click', spinWheel);
+
     copyBtn.addEventListener('click', async () => {
       if (!winner) return;
       try {
         await navigator.clipboard.writeText(winner.name);
-        alert(`${winner.name} kopyalandı.`);
+        copyBtn.textContent = 'Kopyalandı';
+        setTimeout(() => copyBtn.textContent = 'Sonucu Kopyala', 1200);
       } catch {
         alert('Kopyalama başarısız oldu.');
       }
     });
 
-    render();
+    renderLaneButtons();
+    renderStats();
+    renderWinnerCard();
+    renderNewChampions();
+    renderHistory();
+    drawWheel();
   </script>
 </body>
 </html>
