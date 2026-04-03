@@ -285,28 +285,14 @@
     }
 
     @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .result-card {
-        min-height: auto;
-      }
+      .layout { grid-template-columns: 1fr; }
+      .result-card { min-height: auto; }
     }
 
     @media (max-width: 640px) {
-      .row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .history-item {
-        grid-template-columns: 58px 1fr;
-      }
+      .row { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; }
+      .history-item { grid-template-columns: 58px 1fr; }
     }
   </style>
 </head>
@@ -496,17 +482,6 @@
       { name: 'Zyra', lane: 'Support', key: 'Zyra' }
     ];
 
-    const lanes = ['All', 'Top', 'Jungle', 'Mid', 'ADC', 'Support'];
-
-    const colors = {
-      Top: '#de8a49',
-      Jungle: '#44b774',
-      Mid: '#7d74ff',
-      ADC: '#e76fa3',
-      Support: '#4eb9d8',
-      All: '#6ea8ff'
-    };
-
     const wheel = document.getElementById('wheel');
     const ctx = wheel.getContext('2d');
     const lanesEl = document.getElementById('lanes');
@@ -524,10 +499,10 @@
     const countInfo = document.getElementById('countInfo');
 
     let selectedLane = 'All';
-    let rotation = 0;
     let spinning = false;
     let winner = null;
     let history = [];
+    let currentAngle = 0;
 
     function splash(key) {
       return `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${key}_0.jpg`;
@@ -545,7 +520,6 @@
 
     function renderLanes() {
       lanesEl.innerHTML = '';
-
       lanes.forEach(lane => {
         const b = document.createElement('button');
         b.className = lane === selectedLane ? 'chip active' : 'chip';
@@ -553,13 +527,14 @@
         b.onclick = () => {
           selectedLane = lane;
           winner = null;
+          currentAngle = 0;
           refresh();
         };
         lanesEl.appendChild(b);
       });
     }
 
-    function draw() {
+    function drawAtAngle(angle) {
       const list = filtered();
       const size = wheel.width;
       const c = size / 2;
@@ -569,7 +544,6 @@
 
       ctx.save();
       ctx.translate(c, c);
-      ctx.rotate(rotation - Math.PI / 2);
 
       if (!list.length) {
         ctx.beginPath();
@@ -590,10 +564,11 @@
         return;
       }
 
-      const slice = Math.PI * 2 / list.length;
+      const slice = (Math.PI * 2) / list.length;
 
-      list.forEach((champ, i) => {
-        const start = i * slice;
+      for (let i = 0; i < list.length; i++) {
+        const champ = list[i];
+        const start = angle + i * slice - Math.PI / 2;
         const end = start + slice;
 
         ctx.beginPath();
@@ -623,8 +598,9 @@
 
         const text = list.length > 36 ? champ.name.slice(0, 9) : champ.name;
         ctx.fillText(text, 0, 0);
+
         ctx.restore();
-      });
+      }
 
       ctx.beginPath();
       ctx.arc(0, 0, r - 4, 0, Math.PI * 2);
@@ -633,6 +609,10 @@
       ctx.stroke();
 
       ctx.restore();
+    }
+
+    function draw() {
+      drawAtAngle(currentAngle);
     }
 
     function renderResult() {
@@ -679,7 +659,6 @@
       history.forEach(item => {
         const row = document.createElement('div');
         row.className = 'history-item';
-
         row.innerHTML = `
           <div class="thumb" style="background-image:url('${splash(item.key)}')"></div>
           <div>
@@ -687,12 +666,10 @@
             <div class="empty">${item.lane}</div>
           </div>
         `;
-
         const badge = document.createElement('span');
         badge.className = 'pill';
         badge.textContent = item.isNew ? 'Yeni' : 'Seçildi';
         row.appendChild(badge);
-
         historyEl.appendChild(row);
       });
     }
@@ -711,19 +688,18 @@
       const slice = (Math.PI * 2) / list.length;
       const winnerIndex = Math.floor(Math.random() * list.length);
 
-      const currentRotation = rotation;
-      const currentNormalized =
-        ((currentRotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-
-      const targetNormalized =
-        (Math.PI * 2 - (winnerIndex * slice)) % (Math.PI * 2);
-
+      const startAngle = currentAngle;
       const extraTurns = (6 + Math.random() * 2) * Math.PI * 2;
-      const delta =
-        (targetNormalized - currentNormalized + Math.PI * 2) % (Math.PI * 2);
 
-      const start = currentRotation;
-      const target = start + extraTurns + delta;
+      // Pointer üstte sabit. Her dilimin ortası pointer'a gelsin.
+      const finalAngle =
+        (-winnerIndex * slice - slice / 2) % (Math.PI * 2);
+
+      const normalizedStart = ((startAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const normalizedFinal = ((finalAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const delta = (normalizedFinal - normalizedStart + Math.PI * 2) % (Math.PI * 2);
+
+      const targetAngle = startAngle + extraTurns + delta;
       const duration = 3200;
       const startTime = performance.now();
 
@@ -731,13 +707,13 @@
         const t = Math.min((now - startTime) / duration, 1);
         const eased = easeOut(t);
 
-        rotation = start + (target - start) * eased;
+        currentAngle = startAngle + (targetAngle - startAngle) * eased;
         draw();
 
         if (t < 1) {
           requestAnimationFrame(frame);
         } else {
-          rotation = target;
+          currentAngle = targetAngle;
           winner = list[winnerIndex];
           spinning = false;
           draw();
@@ -759,11 +735,13 @@
 
     searchEl.addEventListener('input', () => {
       winner = null;
+      currentAngle = 0;
       refresh();
     });
 
     onlyNewEl.addEventListener('change', () => {
       winner = null;
+      currentAngle = 0;
       refresh();
     });
 
@@ -775,12 +753,12 @@
       searchEl.value = '';
       onlyNewEl.checked = false;
       winner = null;
+      currentAngle = 0;
       refresh();
     });
 
     copyBtn.addEventListener('click', async () => {
       if (!winner) return;
-
       try {
         await navigator.clipboard.writeText(winner.name);
         copyBtn.textContent = 'Kopyalandı';
